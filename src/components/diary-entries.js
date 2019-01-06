@@ -32,6 +32,9 @@ export default() =>
 
       return (
         <Fragment>
+          <button type="button"
+            className="pointer br2 ba b--dark-green bg-green white pa2 ml1 mv1 bg-animate hover-bg-dark-green border-box"
+          >New</button>
           {data.diaryentries &&
             data.diaryentries.map(entry => (
               <ul key={ entry.id }>
@@ -42,6 +45,9 @@ export default() =>
                 <li>{ entry.content }</li>
               </ul>
           ))}
+          <button type="button"
+                  className="pointer br2 ba b--navy bg-dark-blue white pa2 ml1 mv1 bg-animate hover-bg-navy border-box"
+          >Edit</button>
         </Fragment>
       )
     }}
