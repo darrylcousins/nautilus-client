@@ -15,6 +15,8 @@ import Index from './components/index'
 import GlossaryEntries from './components/glossary-entries'
 import DiaryEntries from './components/diary-entries'
 
+import './tachyons.min.css'
+
 class App extends Component {
   render() {
     return (
