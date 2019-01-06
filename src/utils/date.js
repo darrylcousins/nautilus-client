@@ -1,5 +1,5 @@
 /**
- * @file Provides a `Date` utils
+ * @file Provides a `Date` constants
  * @author Darryl Cousins <darryljcousins@gmail.com>
  */
 
