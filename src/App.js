@@ -3,28 +3,30 @@
  * @author Darryl Cousins <darryljcousins@gmail.com>
  */
 import React, { Component } from 'react'
-import logo from './logo.svg'
-import './App.css'
+import { ApolloProvider } from 'react-apollo'
+import {
+  BrowserRouter as Router,
+  Link,
+  Route,
+} from 'react-router-dom'
+
+import Client from './client'
+import Index from './components/index'
+import GlossaryEntries from './components/glossary-entries'
+import DiaryEntries from './components/diary-entries'
 
 class App extends Component {
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
+      <ApolloProvider client={ Client }>
+        <Router>
+          <div>
+            <Route exact path="/" component={ Index } />
+            <Route exact path="/glossary" component={ GlossaryEntries } />
+            <Route exact path="/diary" component={ DiaryEntries } />
+          </div>
+        </Router>
+      </ApolloProvider>
     )
   }
 }

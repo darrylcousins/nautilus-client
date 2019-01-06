@@ -8,12 +8,14 @@ import { Query } from 'react-apollo'
 import gql from 'graphql-tag'
 import moment from 'moment'
 
+import Loading from './loading'
+import Error from './error'
 import { STORE_DATE_FORMAT, HTML_DATE_FORMAT  } from './../utils/date'
 import { ACCOUNT_ID } from '../utils/account'
 
 const GET_GLOSSARY = gql`
-  query GetGlossaryEntries($account: String!) {
-    glossaryentries(account: $account)   {
+  query GetGlossaryEntries($ACCOUNT_ID: String!) {
+    glossaryentries(account: $ACCOUNT_ID)   {
         id
         title
         byline
@@ -25,8 +27,8 @@ const GET_GLOSSARY = gql`
 // development testing
 const date = moment()
 
-export default (props) =>
-  <Query query={ GET_GLOSSARY } variables={{ ACCOUNT_ID  }}>
+export default() =>
+  <Query query={ GET_GLOSSARY } variables={{ ACCOUNT_ID }}>
     {({ data, loading, error }) => {
       if (loading) return <Loading />
       if (error) return <Error />
