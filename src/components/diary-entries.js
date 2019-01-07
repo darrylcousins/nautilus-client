@@ -12,6 +12,8 @@ import Error from './error'
 import { STORE_DATE_FORMAT, HTML_DATE_FORMAT  } from './../utils/date'
 import { ACCOUNT_ID } from '../utils/account'
 
+import Input from './form/input.js'
+
 const GET_DIARY = gql`
   query GetDiaryEntries($ACCOUNT_ID: String!) {
     diaryentries(account: $ACCOUNT_ID)   {

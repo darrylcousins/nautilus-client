@@ -18,6 +18,7 @@ import Client from './client'
 import Index from './components/index'
 import GlossaryEntries from './components/glossary-entries'
 import DiaryEntries from './components/diary-entries'
+import UpdateDiaryEntry from './components/diary-entry-update'
 
 import './tachyons.min.css'
 import './App.css'
@@ -58,6 +59,7 @@ class App extends Component {
                       <Route exact path="/" component={ Index } />
                       <Route exact path="/glossary" component={ GlossaryEntries } />
                       <Route exact path="/diary" component={ DiaryEntries } />
+                      <Route exact path="/diary-edit" component={ UpdateDiaryEntry } />
                     </div>
                   </div>
                 </div>
