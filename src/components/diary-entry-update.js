@@ -3,7 +3,6 @@
  * @author Darryl Cousins <darryljcousins@gmail.com>
  */
 import React from 'react'
-import { Redirect } from 'react-router-dom'
 import { Query } from 'react-apollo'
 import { Form } from 'react-form'
 import gql from 'graphql-tag'
@@ -12,8 +11,11 @@ import Client from '../client'
 import Input from './form/input.js'
 import Message from './form/message.js'
 import Style from './form/style'
+import Loading from './loading'
+import Error from './error'
+import { GET_DIARY_ENTRY } from '../graphql/diary'
 
-export default class UpdateDiaryEntry extends React.Component {
+export default class DiaryEntryUpdate extends React.Component {
 
   constructor(props) {
     super(props)
@@ -45,18 +47,21 @@ export default class UpdateDiaryEntry extends React.Component {
   onSubmit(data, e, formApi) {
 
     const M = gql`
-      mutation UpdateGlossaryEntry(
-        $account: String!
-        $type: String!
-        $id: String!
-        $title: String!
-        $byline: String!
-        $content: String!
-      ){
-        updateGlossaryEntry(
+      mutation
+        UpdateDiaryEntry(
+          $account: String!
+          $type: String!
+          $id: String!
+          $date: String!
+          $title: String!
+          $byline: String!
+          $content: String!
+        ){
+        updateDiaryEntry(
           account: $account
-          id: $id
           type: $type
+          id: $id
+          date: $date
           title: $title
           byline: $byline
           content: $content
@@ -71,94 +76,98 @@ export default class UpdateDiaryEntry extends React.Component {
     // get a promise
     Client.mutate({
       mutation: M,
+      variables: data
       })
       .then((outcome) => {
-        var result = outcome.data.UpdateGlossaryEntry
-        if (result.formErrors != null) {
-          formApi.setFormState("submitting", false)
-          const errors = JSON.parse(result.formErrors)
-          // reset form with submitted data
-          var key
-          for (key in data) {
-            formApi.setValue(key, data[key])
-          }
-          // set errors
-          for (key in errors) {
-            if (errors.hasOwnProperty(key)) {
-              formApi.setError(key, errors[key][0])
-            }
-          }
-        } else {
-          // success
-          // TODO feedback and redirect somewhere
-          console.log('SUCCESS', result)
-        }
+        var result = outcome.data.UpdateDiaryEntry
+        // TODO feedback and redirect somewhere
+        console.log('SUCCESS', result)
       })
       .catch((errors) => {
-        console.log(errors)
-        // form reset and unusable
-        formApi.setError("__all__", "Network error, you may need to reload page")
+        // TODO feedback and redirect somewhere
+        console.log('ERROR', errors)
       })
   }
 
   render() {
-    var data = {
-      title: "Test"
-    }
+    console.log(this.props.match.params.id)
     return (
-      <Form onSubmit={ this.onSubmit }
-        validate={ this.validate }
-        defaultValues={
-          {
-            account: data.account,
-            id: data.id,
-            type: data.type,
-            date: data.date,
-            title: data.title,
-            byline: data.byline,
-            content: data.content,
-          }
-        }
-          >
-        {formApi => (
-          <form
-            onSubmit={ formApi.submitForm }
-            id="diary-entry-update-form"
-            className={ Style.form }>
-            <div>{ formApi.errors && <Message name="__all__" type="error" messages={ formApi.errors }/> }</div>
-            <Input
-              formApi={ formApi }
-              name="date"
-              title="Date"
-              help_text="Date for this diary entry."
-            />
-            <Input
-              formApi={ formApi }
-              name="title"
-              title="Title"
-              help_text="Diary entry title."
-            />
-            <Input
-              formApi={ formApi }
-              name="byline"
-              title="Byline"
-              help_text="Some sort of succinct summary of the day."
-            />
-            <Input
-              formApi={ formApi }
-              name="conetn"
-              title="Content"
-              help_text="List or narate your day,"
-            />
-            <button
-              type="submit"
-              className={ Style.buttonDefault }
-            >Update
-            </button>
-          </form>
-        )}
-      </Form>
+      <Query query={ GET_DIARY_ENTRY } variables={{ "id": this.props.match.params.id }}>
+        {({ data, loading, error }) => {
+          if (loading) return <Loading />
+          if (error) return <Error />
+
+          return (
+            <Form onSubmit={ this.onSubmit }
+              validate={ this.validate }
+              defaultValues={
+                {
+                  account: data.diaryentry.account,
+                  id: this.props.match.params.id,
+                  type: "diaryentry",
+                  date: data.diaryentry.date,
+                  title: data.diaryentry.title,
+                  byline: data.diaryentry.byline,
+                  content: data.diaryentry.content,
+                }
+              }
+                >
+              {formApi => (
+                <form
+                  onSubmit={ formApi.submitForm }
+                  id="diary-entry-update-form"
+                  className={ Style.form }>
+                  <div>{ formApi.errors && <Message name="__all__" type="error" messages={ formApi.errors }/> }</div>
+                  <Input
+                    formApi={ formApi }
+                    type="hidden"
+                    name ="account"
+                  />
+                  <Input
+                    formApi={ formApi }
+                    type="hidden"
+                    name ="id"
+                  />
+                  <Input
+                    formApi={ formApi }
+                    type="hidden"
+                    name = "type"
+                  />
+                  <Input
+                    formApi={ formApi }
+                    name="date"
+                    title="Date"
+                    help_text="Date for this diary entry."
+                  />
+                  <Input
+                    formApi={ formApi }
+                    name="title"
+                    title="Title"
+                    help_text="Diary entry title."
+                  />
+                  <Input
+                    formApi={ formApi }
+                    name="byline"
+                    title="Byline"
+                    help_text="Some sort of succinct summary of the day."
+                  />
+                  <Input
+                    formApi={ formApi }
+                    name="content"
+                    title="Content"
+                    help_text="List or narate your day,"
+                  />
+                  <button
+                    type="submit"
+                    className={ Style.buttonDefault }
+                  >Update
+                  </button>
+                </form>
+              )}
+            </Form>
+          )
+        }}
+      </Query>
     )
   }
 }
-

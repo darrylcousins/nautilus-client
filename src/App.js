@@ -8,6 +8,7 @@ import {
   BrowserRouter as Router,
   Link,
   Route,
+  Switch
 } from 'react-router-dom'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -18,7 +19,9 @@ import Client from './client'
 import Index from './components/index'
 import GlossaryEntries from './components/glossary-entries'
 import DiaryEntries from './components/diary-entries'
-import UpdateDiaryEntry from './components/diary-entry-update'
+import DiaryEntryDetail from './components/diary-entry-detail'
+import DiaryEntryUpdate from './components/diary-entry-update'
+import { ACCOUNT_ID } from './utils/account'
 
 import './tachyons.min.css'
 import './App.css'
@@ -58,8 +61,11 @@ class App extends Component {
                     <div className="ph1 pv1 background-gray tl">
                       <Route exact path="/" component={ Index } />
                       <Route exact path="/glossary" component={ GlossaryEntries } />
-                      <Route exact path="/diary" component={ DiaryEntries } />
-                      <Route exact path="/diary-edit" component={ UpdateDiaryEntry } />
+                      <Route exact path="/diary" component={ DiaryEntries } account={ ACCOUNT_ID } />
+                      <Switch>
+                        <Route path="/diary/:id/edit" component={ DiaryEntryUpdate } />
+                        <Route path="/diary/:id" component={ DiaryEntryDetail } />
+                      </Switch>
                     </div>
                   </div>
                 </div>

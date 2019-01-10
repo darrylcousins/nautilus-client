@@ -33,3 +33,16 @@ Client
           }
     `})
   .then(result => console.log(result))
+
+Client
+  .query({
+    query: gql`
+      {
+        account @client {
+          id
+        }
+      }
+    `
+  })
+  .then(result => console.log('GET ACCOUNT', result.data.account.id))
+
