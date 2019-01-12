@@ -59,13 +59,15 @@ class App extends Component {
                 <div className="cf mw9 tc-m">
                   <div className="pb2 pb3-ns pt2 mt0 black-70">
                     <div className="ph1 pv1 background-gray tl">
-                      <Route exact path="/" component={ Index } />
-                      <Route exact path="/glossary" component={ GlossaryEntries } />
-                      <Route exact path="/diary" component={ DiaryEntries } account={ ACCOUNT_ID } />
-                      <Switch>
-                        <Route path="/diary/:id/edit" component={ DiaryEntryUpdate } />
-                        <Route path="/diary/:id" component={ DiaryEntryDetail } />
-                      </Switch>
+                      <section className="mw6 mw7-ns center pa3 ph5-ns">
+                        <Route exact path="/" component={ Index } />
+                        <Route exact path="/glossary" component={ GlossaryEntries } />
+                        <Route exact path="/diary" component={ DiaryEntries } account={ ACCOUNT_ID } />
+                        <Switch>
+                          <Route path="/diary/:id/edit" component={ DiaryEntryUpdate } />
+                          <Route path="/diary/:id" component={ DiaryEntryDetail } />
+                        </Switch>
+                      </section>
                     </div>
                   </div>
                 </div>

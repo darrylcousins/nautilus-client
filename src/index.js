@@ -20,19 +20,19 @@ ReactDOM.render(<App />, document.getElementById('root'))
 // Learn more about service workers: http://bit.ly/CRA-PWA
 serviceWorker.unregister()
 
-Client
-  .query({
-    query: gql`
-    query getAccounts {
-      accounts {
-            id
-            firstname
-            lastname
-            email
-          }
-          }
-    `})
-  .then(result => console.log(result))
+//Client
+//  .query({
+//    query: gql`
+//    query getAccounts {
+//      accounts {
+//            id
+//            firstname
+//            lastname
+//            email
+//          }
+//          }
+//    `})
+//  .then(result => console.log('index-debug:', result))
 
 Client
   .query({
@@ -44,5 +44,5 @@ Client
       }
     `
   })
-  .then(result => console.log('GET ACCOUNT', result.data.account.id))
+  .then(result => console.log('index-debug account:', result.data.account.id))
 

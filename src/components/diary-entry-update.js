@@ -2,13 +2,15 @@
  * @file Provides an `Update Diary Entry` form component
  * @author Darryl Cousins <darryljcousins@gmail.com>
  */
-import React from 'react'
+import React, { Fragment } from 'react'
+import { Link } from 'react-router-dom'
 import { Query } from 'react-apollo'
-import { Form } from 'react-form'
+import { Form, Text } from 'react-form'
 import gql from 'graphql-tag'
 
 import Client from '../client'
 import Input from './form/input.js'
+import TextArea from './form/textarea.js'
 import Message from './form/message.js'
 import Style from './form/style'
 import Loading from './loading'
@@ -30,7 +32,6 @@ export default class DiaryEntryUpdate extends React.Component {
       byline: "Byline",
       content: "Content",
     }
-    console.log(data)
     let ret = Object()
     for (var key in required) {
       if (required.hasOwnProperty(key) && data.hasOwnProperty(key)) {
@@ -38,7 +39,11 @@ export default class DiaryEntryUpdate extends React.Component {
           ret[key] = Object()
           ret[key]["error"] = `${ required[key] } is a required field`
           ret[key]["warning"] = `Please enter a ${ required[key].toLowerCase() }`
+        } else {
+          ret[key] = Object()
+          ret[key]["success"] = true
         }
+
       }
     }
     return ret
@@ -66,7 +71,7 @@ export default class DiaryEntryUpdate extends React.Component {
           byline: $byline
           content: $content
         ){
-          id
+          date
           title
           byline
           content
@@ -81,7 +86,7 @@ export default class DiaryEntryUpdate extends React.Component {
       .then((outcome) => {
         var result = outcome.data.UpdateDiaryEntry
         // TODO feedback and redirect somewhere
-        console.log('SUCCESS', result)
+        console.log('SUCCESS', outcome)
       })
       .catch((errors) => {
         // TODO feedback and redirect somewhere
@@ -90,7 +95,9 @@ export default class DiaryEntryUpdate extends React.Component {
   }
 
   render() {
-    console.log(this.props.match.params.id)
+    const ListStyle = {
+      paddingInlineStart: "0px"
+    }
     return (
       <Query query={ GET_DIARY_ENTRY } variables={{ "id": this.props.match.params.id }}>
         {({ data, loading, error }) => {
@@ -98,73 +105,84 @@ export default class DiaryEntryUpdate extends React.Component {
           if (error) return <Error />
 
           return (
-            <Form onSubmit={ this.onSubmit }
-              validate={ this.validate }
-              defaultValues={
-                {
-                  account: data.diaryentry.account,
-                  id: this.props.match.params.id,
-                  type: "diaryentry",
-                  date: data.diaryentry.date,
-                  title: data.diaryentry.title,
-                  byline: data.diaryentry.byline,
-                  content: data.diaryentry.content,
+            <Fragment>
+              <ul className="list" style={ ListStyle }>
+                <li className="dib mr2">
+                  <Link
+                    className="f6 f5-ns b db link dim mid-gray"
+                    to={ `/diary/` }>Diary</Link>
+                </li>
+                <li className="dib mr2">
+                  <Link
+                    className="f6 f5-ns b db link dim mid-gray"
+                    to={ `/diary/${ this.props.match.params.id }` }>Detail</Link>
+                </li>
+              </ul>
+              <Form onSubmit={ this.onSubmit }
+                validate={ this.validate }
+                defaultValues={
+                  {
+                    account: data.diaryentry.account,
+                    type: "diaryentry",
+                    id: this.props.match.params.id,
+                    date: data.diaryentry.date,
+                    title: data.diaryentry.title,
+                    byline: data.diaryentry.byline,
+                    content: data.diaryentry.content,
+                  }
                 }
-              }
-                >
-              {formApi => (
-                <form
-                  onSubmit={ formApi.submitForm }
-                  id="diary-entry-update-form"
-                  className={ Style.form }>
-                  <div>{ formApi.errors && <Message name="__all__" type="error" messages={ formApi.errors }/> }</div>
-                  <Input
-                    formApi={ formApi }
-                    type="hidden"
-                    name ="account"
-                  />
-                  <Input
-                    formApi={ formApi }
-                    type="hidden"
-                    name ="id"
-                  />
-                  <Input
-                    formApi={ formApi }
-                    type="hidden"
-                    name = "type"
-                  />
-                  <Input
-                    formApi={ formApi }
-                    name="date"
-                    title="Date"
-                    help_text="Date for this diary entry."
-                  />
-                  <Input
-                    formApi={ formApi }
-                    name="title"
-                    title="Title"
-                    help_text="Diary entry title."
-                  />
-                  <Input
-                    formApi={ formApi }
-                    name="byline"
-                    title="Byline"
-                    help_text="Some sort of succinct summary of the day."
-                  />
-                  <Input
-                    formApi={ formApi }
-                    name="content"
-                    title="Content"
-                    help_text="List or narate your day,"
-                  />
-                  <button
-                    type="submit"
-                    className={ Style.buttonDefault }
-                  >Update
-                  </button>
-                </form>
-              )}
-            </Form>
+                  >
+                {formApi => (
+                  <form
+                    onSubmit={ formApi.submitForm }
+                    id="diary-entry-update-form"
+                    className={ Style.form }>
+                    <div>{ formApi.errors && <Message name="__all__" type="error" messages={ formApi.errors }/> }</div>
+                    <Text
+                      type="hidden"
+                      name ="account"
+                    />
+                    <Text
+                      type="hidden"
+                      name = "type"
+                    />
+                    <Input
+                      formApi={ formApi }
+                      name="date"
+                      title="Date"
+                      help_text="Date for this diary entry."
+                    />
+                    <Input
+                      formApi={ formApi }
+                      name="title"
+                      title="Title"
+                      help_text="Diary entry title."
+                    />
+                    <TextArea
+                      formApi={ formApi }
+                      name="byline"
+                      title="Byline"
+                      help_text="Some sort of succinct summary of the day."
+                    />
+                    <TextArea
+                      formApi={ formApi }
+                      name="content"
+                      title="Content"
+                      help_text="List or narate your day,"
+                      rows="4"
+                      cols="20"
+                    />
+                    <div className="fr">
+                      <button
+                        type="submit"
+                        className={ Style.buttonDefault }
+                      >Update
+                      </button>
+                    </div>
+                  </form>
+                )}
+              </Form>
+            </Fragment>
           )
         }}
       </Query>
