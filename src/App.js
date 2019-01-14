@@ -17,7 +17,7 @@ import faGithub from '@fortawesome/fontawesome-free-brands/faGithub'
 
 import Client from './client'
 import Index from './components/index'
-import GlossaryEntries from './components/glossary-entries'
+import GlossaryEntries from './components/glossary-entry-list'
 import DiaryEntries from './components/diary-entry-list'
 import DiaryEntryDetail from './components/diary-entry-detail'
 import DiaryEntryUpdate from './components/diary-entry-update'
