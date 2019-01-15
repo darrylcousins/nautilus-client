@@ -55,23 +55,25 @@ export default class DiaryEntryUpdate extends React.Component {
     const M = gql`
       mutation
         UpdateDiaryEntry(
+          $id: String!
           $account: String!
           $type: String!
-          $id: String!
           $date: String!
           $title: String!
           $byline: String!
           $content: String!
         ){
         updateDiaryEntry(
+          id: $id
           account: $account
           type: $type
-          id: $id
           date: $date
           title: $title
           byline: $byline
           content: $content
         ){
+          id
+          account
           date
           title
           byline

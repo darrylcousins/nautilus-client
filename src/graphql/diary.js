@@ -7,8 +7,8 @@ import gql from 'graphql-tag'
 export const GET_DIARY_ENTRY = gql`
   query GetDiaryEntry($id: String!) {
     diaryentry(id: $id)   {
-        account
         id
+        account
         date
         title
         byline
