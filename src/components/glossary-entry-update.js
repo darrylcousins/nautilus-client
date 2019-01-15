@@ -1,5 +1,5 @@
 /**
- * @file Provides an `Update Diary Entry` form component
+ * @file Provides an `Update Glossary Entry` form component
  * @author Darryl Cousins <darryljcousins@gmail.com>
  */
 import React, { Fragment } from 'react'
@@ -16,9 +16,9 @@ import Style from './form/style'
 import Loading from './loading'
 import Error from './error'
 import { ListStyle } from '../utils/style'
-import { GET_DIARY_ENTRY } from '../graphql/diary'
+import { GET_GLOSSARY_ENTRY } from '../graphql/glossary'
 
-export default class DiaryEntryUpdate extends React.Component {
+export default class GlossaryEntryUpdate extends React.Component {
 
   constructor(props) {
     super(props)
@@ -29,7 +29,6 @@ export default class DiaryEntryUpdate extends React.Component {
     // test for empty fields do it here rather than at field level
     let required = {
       title: "Title",
-      date: "Date",
       byline: "Byline",
       content: "Content",
     }
@@ -54,53 +53,49 @@ export default class DiaryEntryUpdate extends React.Component {
 
     const M = gql`
       mutation
-        UpdateDiaryEntry(
+        UpdateGlossaryEntry(
           $id: String!
           $account: String!
           $type: String!
-          $date: String!
           $title: String!
           $byline: String!
           $content: String!
         ){
-        updateDiaryEntry(
+        updateGlossaryEntry(
           id: $id
           account: $account
           type: $type
-          date: $date
           title: $title
           byline: $byline
           content: $content
         ){
           id
           account
-          date
           title
           byline
           content
         }
       }
     `
+
     // get a promise
     Client.mutate({
       mutation: M,
       variables: data
       })
       .then((outcome) => {
-        var result = outcome.data.UpdateDiaryEntry
-        // TODO feedback and redirect somewhere
+        var result = outcome.data.UpdateGlossaryEntry
+        // feedback and redirect somewhere
         console.log('SUCCESS', result)
       })
       .catch((errors) => {
-        // TODO feedback and redirect somewhere
         console.log('ERROR', errors)
       })
   }
 
   render() {
-
     return (
-      <Query query={ GET_DIARY_ENTRY } variables={{ "id": this.props.match.params.id }}>
+      <Query query={ GET_GLOSSARY_ENTRY } variables={{ "id": this.props.match.params.id }}>
         {({ data, loading, error }) => {
           if (loading) return <Loading />
           if (error) return <Error />
@@ -112,34 +107,33 @@ export default class DiaryEntryUpdate extends React.Component {
                   <li className="dib mr2">
                     <Link
                       className="f6 f5-ns b db link dim mid-gray"
-                      to={ `/diary/` }>Diary List</Link>
+                      to={ `/glossary/` }>Glossary List</Link>
                   </li>
                   <li className="dib mr2">
                     <Link
                       className="f6 f5-ns b db link dim navy"
-                      to={ `/diary/${ this.props.match.params.id }` }>{ data.diaryentry.title }</Link>
+                      to={ `/glossary/${ this.props.match.params.id }` }>{ data.glossaryentry.title }</Link>
                   </li>
                 </ul>
               </div>
-              <h1 className="navy">Edit { data.diaryentry.title }</h1>
+              <h1 className="navy">Edit { data.glossaryentry.title }</h1>
               <Form onSubmit={ this.onSubmit }
                 validate={ this.validate }
                 defaultValues={
                   {
-                    account: data.diaryentry.account,
-                    type: "diaryentry",
+                    account: data.glossaryentry.account,
+                    type: "glossaryentry",
                     id: this.props.match.params.id,
-                    date: data.diaryentry.date,
-                    title: data.diaryentry.title,
-                    byline: data.diaryentry.byline,
-                    content: data.diaryentry.content,
+                    title: data.glossaryentry.title,
+                    byline: data.glossaryentry.byline,
+                    content: data.glossaryentry.content,
                   }
                 }
                   >
                 {formApi => (
                   <form
                     onSubmit={ formApi.submitForm }
-                    id="diary-entry-update-form"
+                    id="glossary-entry-update-form"
                     className={ Style.form }>
                     <div>{ formApi.errors && <Message name="__all__" type="error" messages={ formApi.errors }/> }</div>
                     <Text
@@ -152,15 +146,9 @@ export default class DiaryEntryUpdate extends React.Component {
                     />
                     <Input
                       formApi={ formApi }
-                      name="date"
-                      title="Date"
-                      help_text="Date for this diary entry."
-                    />
-                    <Input
-                      formApi={ formApi }
                       name="title"
                       title="Title"
-                      help_text="Diary entry title."
+                      help_text="Glossary entry title."
                     />
                     <TextArea
                       formApi={ formApi }

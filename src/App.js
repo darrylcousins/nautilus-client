@@ -18,9 +18,8 @@ import faGithub from '@fortawesome/fontawesome-free-brands/faGithub'
 import Client from './client'
 import Index from './components/index'
 import GlossaryEntries from './components/glossary-entry-list'
-import DiaryEntries from './components/diary-entry-list'
-import DiaryEntryDetail from './components/diary-entry-detail'
-import DiaryEntryUpdate from './components/diary-entry-update'
+import GlossaryEntryDetail from './components/glossary-entry-detail'
+import GlossaryEntryUpdate from './components/glossary-entry-update'
 import { ACCOUNT_ID } from './utils/account'
 
 import './tachyons.min.css'
@@ -61,11 +60,10 @@ class App extends Component {
                     <div className="ph1 pv1 background-gray tl">
                       <section className="mw6 mw7-ns center pa3 ph5-ns">
                         <Route exact path="/" component={ Index } />
-                        <Route exact path="/glossary" component={ GlossaryEntries } />
-                        <Route exact path="/diary" component={ DiaryEntries } account={ ACCOUNT_ID } />
+                        <Route exact path="/glossary" component={ GlossaryEntries } account={ ACCOUNT_ID } />
                         <Switch>
-                          <Route path="/diary/:id/edit" component={ DiaryEntryUpdate } />
-                          <Route path="/diary/:id" component={ DiaryEntryDetail } />
+                          <Route path="/glossary/:id/edit" component={ GlossaryEntryUpdate } />
+                          <Route path="/glossary/:id" component={ GlossaryEntryDetail } />
                         </Switch>
                       </section>
                     </div>
