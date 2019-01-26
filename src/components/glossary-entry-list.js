@@ -35,6 +35,15 @@ export default() =>
 
 class GlossaryEntries extends React.Component {
 
+  constructor(props) {
+    super(props)
+    this.handleSearch = this.handleSearch.bind(this)
+  }
+
+  handleSearch(e) {
+    console.log(e.target.value)
+  }
+
   render() {
     return (
       <Query
@@ -47,16 +56,17 @@ class GlossaryEntries extends React.Component {
 
           return (
             <Fragment>
-              <ul className="list" style={ ListStyle }>
-                <li className="dib mr2 fr">
-                  <Link
-                    className="f6 f5-ns b db link dim orange"
-                    to={ `/glossary/create` }>
-                    <FontAwesomeIcon icon={ faPlus } color="red" />
-                  </Link>
-                </li>
-              </ul>
+              <Link
+                className="f6 f5-ns b db link dim orange fr"
+                to={ `/glossary/create` }>
+                <FontAwesomeIcon icon={ faPlus } color="red" />
+              </Link>
               <h1 className="navy">Glossary List</h1>
+              <input
+                type="text"
+                onChange={ this.handleSearch }
+                className="input-reset ba b--black-20 br2 pa2 mb2 db w-90"
+                placeholder="Search..." />
               {data.glossaryentries &&
                 data.glossaryentries.map((entry, idx) => (
                   <Fragment
