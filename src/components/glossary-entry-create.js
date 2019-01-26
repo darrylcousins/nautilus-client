@@ -1,5 +1,5 @@
 /**
- * @file Provides an `Update Glossary Entry` form component
+ * @file Provides an `Create Glossary Entry` form component
  * @author Darryl Cousins <darryljcousins@gmail.com>
  */
 import React, { Fragment } from 'react'
@@ -9,9 +9,7 @@ import { Form, Text } from 'react-form'
 import gql from 'graphql-tag'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import faPlus from '@fortawesome/fontawesome-free-solid/faPlus'
 import faList from '@fortawesome/fontawesome-free-solid/faList'
-import faEye from '@fortawesome/fontawesome-free-solid/faEye'
 
 import Client from '../client'
 import Input from './form/input.js'
@@ -21,9 +19,10 @@ import Style from './form/style'
 import Loading from './loading'
 import Error from './error'
 import { ListStyle } from '../utils/style'
-import { GET_GLOSSARY_ENTRY } from '../graphql/glossary'
+import { GET_ACCOUNT } from '../graphql/account'
+import { GET_GLOSSARY } from '../graphql/glossary'
 
-export default class GlossaryEntryUpdate extends React.Component {
+export default class GlossaryEntryCreate extends React.Component {
 
   constructor(props) {
     super(props)
@@ -58,18 +57,14 @@ export default class GlossaryEntryUpdate extends React.Component {
 
     const M = gql`
       mutation
-        UpdateGlossaryEntry(
-          $id: String!
+        CreateGlossaryEntry(
           $account: String!
-          $type: String!
           $title: String!
           $byline: String!
           $content: String!
         ){
-        updateGlossaryEntry(
-          id: $id
+        createGlossaryEntry(
           account: $account
-          type: $type
           title: $title
           byline: $byline
           content: $content
@@ -83,15 +78,19 @@ export default class GlossaryEntryUpdate extends React.Component {
       }
     `
 
+    const account = Client.cache.readQuery({
+      query: GET_ACCOUNT
+    }).account
+
     // get a promise
     Client.mutate({
       mutation: M,
       variables: data
       })
       .then((outcome) => {
-        var result = outcome.data.updateGlossaryEntry
-        console.log('SUCCESS', result)
-        this.props.history.push(`/glossary/${ result.id }`)
+        var result = outcome.data.createGlossaryEntry
+        //this.props.history.push(`/glossary/${ result.id }`)
+        this.props.history.push(`/glossary/`)
       })
       .catch((errors) => {
         console.log('ERROR', errors)
@@ -100,7 +99,7 @@ export default class GlossaryEntryUpdate extends React.Component {
 
   render() {
     return (
-      <Query query={ GET_GLOSSARY_ENTRY } variables={{ "id": this.props.match.params.id }}>
+      <Query query={ GET_ACCOUNT }>
         {({ data, loading, error }) => {
           if (loading) return <Loading />
           if (error) return <Error />
@@ -116,33 +115,14 @@ export default class GlossaryEntryUpdate extends React.Component {
                       <FontAwesomeIcon icon={ faList } color="navy" />
                     </Link>
                   </li>
-                  <li className="dib mr2">
-                    <Link
-                      className="f6 f5-ns b db link dim"
-                      to={ `/glossary/${ this.props.match.params.id }` }>
-                      <FontAwesomeIcon icon={ faEye } color="navy" />
-                    </Link>
-                  </li>
-                  <li className="dib mr2">
-                    <Link
-                      className="f6 f5-ns b db link dim"
-                      to={ `/glossary/create` }>
-                      <FontAwesomeIcon icon={ faPlus } color="red" />
-                    </Link>
-                  </li>
                 </ul>
               </div>
-              <h1 className="navy">Edit { data.glossaryentry.title }</h1>
+              <h1 className="navy">Create Entry</h1>
               <Form onSubmit={ this.onSubmit }
                 validate={ this.validate }
                 defaultValues={
                   {
-                    account: data.glossaryentry.account,
-                    type: "glossaryentry",
-                    id: this.props.match.params.id,
-                    title: data.glossaryentry.title,
-                    byline: data.glossaryentry.byline,
-                    content: data.glossaryentry.content,
+                    account: data.account.id,
                   }
                 }
                   >
@@ -155,10 +135,6 @@ export default class GlossaryEntryUpdate extends React.Component {
                     <Text
                       type="hidden"
                       name ="account"
-                    />
-                    <Text
-                      type="hidden"
-                      name = "type"
                     />
                     <Input
                       formApi={ formApi }
@@ -184,7 +160,7 @@ export default class GlossaryEntryUpdate extends React.Component {
                       <button
                         type="submit"
                         className={ Style.buttonDefault }
-                      >Update
+                      >Save
                       </button>
                     </div>
                   </form>

@@ -9,7 +9,7 @@ import { setContext } from 'apollo-link-context'
 import { withClientState } from 'apollo-link-state'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 
-import { ACCOUNT_ID } from '../utils/account'
+import { ACCOUNT_ID } from '../graphql/account'
 
 const AccountType = "account"
 
@@ -20,8 +20,13 @@ const typeDefs = `
     lastname: String
     email: String
   }
+  type Context {
+    content_id: String
+    content_type: String
+  }
   type Query {
     account: Account
+    context: Context
   }
 `
 

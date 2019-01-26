@@ -20,7 +20,9 @@ import Index from './components/index'
 import GlossaryEntries from './components/glossary-entry-list'
 import GlossaryEntryDetail from './components/glossary-entry-detail'
 import GlossaryEntryUpdate from './components/glossary-entry-update'
-import { ACCOUNT_ID } from './utils/account'
+import GlossaryEntryCreate from './components/glossary-entry-create'
+import GlossaryEntryDelete from './components/glossary-entry-delete'
+import { ACCOUNT_ID } from './graphql/account'
 
 import './tachyons.min.css'
 import './App.css'
@@ -61,7 +63,9 @@ class App extends Component {
                       <section className="mw6 mw7-ns center pa3 ph5-ns">
                         <Route exact path="/" component={ Index } />
                         <Route exact path="/glossary" component={ GlossaryEntries } account={ ACCOUNT_ID } />
+                        <Route exact path="/glossary/create" component={ GlossaryEntryCreate } account={ ACCOUNT_ID } />
                         <Switch>
+                          <Route path="/glossary/:id/delete" component={ GlossaryEntryDelete } />
                           <Route path="/glossary/:id/edit" component={ GlossaryEntryUpdate } />
                           <Route path="/glossary/:id" component={ GlossaryEntryDetail } />
                         </Switch>

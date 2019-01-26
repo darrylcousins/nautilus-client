@@ -15,3 +15,14 @@ export const GET_GLOSSARY_ENTRY = gql`
       }
     }
 `
+
+export const GET_GLOSSARY = gql`
+  query GetGlossaryEntries($account: String!) {
+    glossaryentries(account: $account)   {
+        id
+        title
+        byline
+        content
+      }
+    }
+`

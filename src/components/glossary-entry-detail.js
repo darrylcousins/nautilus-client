@@ -6,6 +6,12 @@ import React, { Fragment } from 'react'
 import { Link } from 'react-router-dom'
 import { Query } from 'react-apollo'
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import faEdit from '@fortawesome/fontawesome-free-solid/faEdit'
+import faPlus from '@fortawesome/fontawesome-free-solid/faPlus'
+import faList from '@fortawesome/fontawesome-free-solid/faList'
+import faTrashAlt from '@fortawesome/fontawesome-free-solid/faTrashAlt'
+
 import Loading from './loading'
 import Error from './error'
 import { ListStyle } from '../utils/style'
@@ -20,28 +26,41 @@ export default class GlossaryEntryDetail extends React.Component {
           if (loading) return <Loading />
           if (error) return <Error />
 
-          console.log(data)
           return (
             <Fragment>
               <ul className="list fr" style={ ListStyle }>
                 <li className="dib mr2">
                   <Link
-                    className="f6 f5-ns b db link dim mid-gray"
-                    to={ `/glossary/` }>Glossary List</Link>
+                    className="f6 f5-ns b db link dim"
+                    to={ `/glossary/` }>
+                    <FontAwesomeIcon icon={ faList } color="navy" />
+                  </Link>
                 </li>
                 <li className="dib mr2">
                   <Link
-                    className="f6 f5-ns b db link dim navy"
-                    to={ `/glossary/${ this.props.match.params.id }/edit` }>Edit Entry</Link>
+                    className="f6 f5-ns b db link dim"
+                    to={ `/glossary/${ this.props.match.params.id }/edit` }>
+                    <FontAwesomeIcon icon={ faEdit } color="navy" />
+                  </Link>
+                </li>
+                <li className="dib mr2">
+                  <Link
+                    className="f6 f5-ns b db link dim"
+                    to={ `/glossary/${ this.props.match.params.id }/delete` }>
+                    <FontAwesomeIcon icon={ faTrashAlt } color="navy" />
+                  </Link>
+                </li>
+                <li className="dib mr2">
+                  <Link
+                    className="f6 f5-ns b db link dim"
+                    to={ `/glossary/create` }>
+                    <FontAwesomeIcon icon={ faPlus } color="red" />
+                  </Link>
                 </li>
               </ul>
               <h1 className="navy">{ data.glossaryentry.title }</h1>
-              <ul>
-                <li>{ this.props.match.params.id }</li>
-                <li>{ data.glossaryentry.title }</li>
-                <li>{ data.glossaryentry.byline }</li>
-                <li>{ data.glossaryentry.content }</li>
-              </ul>
+              <p className="f8 silver">{ data.glossaryentry.byline }</p>
+              <p>{ data.glossaryentry.content }</p>
             </Fragment>
           )
         }}

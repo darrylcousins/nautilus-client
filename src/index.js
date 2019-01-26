@@ -2,14 +2,13 @@
  * @file Provides root of the App
  * @author Darryl Cousins <darryljcousins@gmail.com>
  */
-import gql from "graphql-tag"
-
 import React from 'react'
 import ReactDOM from 'react-dom'
 import * as serviceWorker from './serviceWorker'
 
 import App from './App'
 import Client from './client'
+import { GET_ACCOUNT } from './graphql/account'
 
 import './index.css'
 
@@ -36,13 +35,7 @@ serviceWorker.unregister()
 
 Client
   .query({
-    query: gql`
-      {
-        account @client {
-          id
-        }
-      }
-    `
+    query: GET_ACCOUNT
   })
   .then(result => console.log('index-debug account:', result.data.account.id))
 
