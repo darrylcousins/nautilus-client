@@ -17,8 +17,14 @@ export const GET_GLOSSARY_ENTRY = gql`
 `
 
 export const GET_GLOSSARY = gql`
-  query GetGlossaryEntries($account: String!) {
-    glossaryentries(account: $account)   {
+  query GetGlossaryEntries(
+    $account: String!
+    $searchTerm: String
+    ) {
+    glossaryentries(
+      account: $account
+      searchTerm: $searchTerm
+      ) {
         id
         title
         byline

@@ -91,7 +91,7 @@ export default class GlossaryEntryUpdate extends React.Component {
       .then((outcome) => {
         var result = outcome.data.updateGlossaryEntry
         console.log('SUCCESS', result)
-        this.props.history.push(`/glossary/${ result.id }`)
+        this.props.history.push(`/glossary/`)
       })
       .catch((errors) => {
         console.log('ERROR', errors)

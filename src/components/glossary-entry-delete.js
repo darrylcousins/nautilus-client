@@ -19,8 +19,8 @@ import Style from './form/style'
 import Loading from './loading'
 import Error from './error'
 import { ListStyle } from '../utils/style'
-import { GET_GLOSSARY, GET_GLOSSARY_ENTRY } from '../graphql/glossary'
-import { GET_ACCOUNT } from '../graphql/account'
+import { GET_GLOSSARY_ENTRY } from '../graphql/glossary'
+//import { GET_ACCOUNT } from '../graphql/account'
 
 export default class GlossaryEntryDelete extends React.Component {
 
@@ -58,9 +58,9 @@ export default class GlossaryEntryDelete extends React.Component {
       }
     `
 
-    const account = Client.cache.readQuery({
-      query: GET_ACCOUNT
-    }).account
+    //const account = Client.cache.readQuery({
+    //  query: GET_ACCOUNT
+    //}).account
 
     // get a promise
     // update cache and redirect to glossary listing
@@ -70,6 +70,7 @@ export default class GlossaryEntryDelete extends React.Component {
       })
       .then((outcome) => {
         var result = outcome.data.deleteGlossaryEntry
+        // use result to pass message feedback to user
         console.log('SUCCESS', result)
         this.props.history.push(`/glossary/`)
       })

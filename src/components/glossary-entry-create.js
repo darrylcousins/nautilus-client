@@ -20,7 +20,6 @@ import Loading from './loading'
 import Error from './error'
 import { ListStyle } from '../utils/style'
 import { GET_ACCOUNT } from '../graphql/account'
-import { GET_GLOSSARY } from '../graphql/glossary'
 
 export default class GlossaryEntryCreate extends React.Component {
 
@@ -78,10 +77,6 @@ export default class GlossaryEntryCreate extends React.Component {
       }
     `
 
-    const account = Client.cache.readQuery({
-      query: GET_ACCOUNT
-    }).account
-
     // get a promise
     Client.mutate({
       mutation: M,
@@ -89,6 +84,8 @@ export default class GlossaryEntryCreate extends React.Component {
       })
       .then((outcome) => {
         var result = outcome.data.createGlossaryEntry
+        console.log('SUCCESS', result)
+        // use result to pass message feedback to user
         //this.props.history.push(`/glossary/${ result.id }`)
         this.props.history.push(`/glossary/`)
       })
