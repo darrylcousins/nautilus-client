@@ -5,6 +5,7 @@
 import React, { Fragment } from 'react'
 import { Link } from 'react-router-dom'
 import { Query } from 'react-apollo'
+import marked from 'marked'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import faEdit from '@fortawesome/fontawesome-free-solid/faEdit'
@@ -21,7 +22,10 @@ export default class GlossaryEntryDetail extends React.Component {
 
   render() {
     return (
-      <Query query={ GET_GLOSSARY_ENTRY } variables={{ "id": this.props.match.params.id }}>
+      <Query
+        query={ GET_GLOSSARY_ENTRY }
+        variables={{ "id": this.props.match.params.id }}
+        fetchPolicy="cache-and-network">
         {({ data, loading, error }) => {
           if (loading) return <Loading />
           if (error) return <Error />
@@ -59,8 +63,12 @@ export default class GlossaryEntryDetail extends React.Component {
                 </li>
               </ul>
               <h1 className="navy">{ data.glossaryentry.title }</h1>
-              <p className="f8 silver">{ data.glossaryentry.byline }</p>
-              <p>{ data.glossaryentry.content }</p>
+              <p className="f8 dark-gray i">{ data.glossaryentry.byline }</p>
+              <div
+                className="f8 dark-gray i"
+                dangerouslySetInnerHTML={{ __html: marked(data.glossaryentry.byline) }} />
+              <div
+                dangerouslySetInnerHTML={{ __html: marked(data.glossaryentry.content) }} />
             </Fragment>
           )
         }}

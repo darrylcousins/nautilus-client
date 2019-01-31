@@ -20,9 +20,14 @@ const typeDefs = `
     lastname: String
     email: String
   }
-  type Context {
-    content_id: String
-    content_type: String
+  type GlossaryEntry {
+    id: String
+    account: String!
+    title: String
+    byline: String
+    content: String
+    ctime: String!
+    mtime: String!
   }
   type Query {
     account: Account

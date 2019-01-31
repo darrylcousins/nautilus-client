@@ -100,7 +100,10 @@ export default class GlossaryEntryUpdate extends React.Component {
 
   render() {
     return (
-      <Query query={ GET_GLOSSARY_ENTRY } variables={{ "id": this.props.match.params.id }}>
+      <Query
+        query={ GET_GLOSSARY_ENTRY } 
+        variables={{ "id": this.props.match.params.id }}
+        fetchPolicy="cache-and-network">
         {({ data, loading, error }) => {
           if (loading) return <Loading />
           if (error) return <Error />

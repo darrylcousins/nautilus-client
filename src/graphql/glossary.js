@@ -1,5 +1,5 @@
 /**
- * @file Provides a `Glossary` graphql queries
+ * @file Provides `Glossary` graphql queries
  * @author Darryl Cousins <darryljcousins@gmail.com>
  */
 import gql from 'graphql-tag'

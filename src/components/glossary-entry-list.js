@@ -5,6 +5,7 @@
 import React, { Fragment } from 'react'
 import { Link } from 'react-router-dom'
 import { Query } from 'react-apollo'
+import marked from 'marked'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import faEdit from '@fortawesome/fontawesome-free-solid/faEdit'
@@ -69,7 +70,7 @@ class GlossaryEntries extends React.Component {
       <Query
         query={ GET_GLOSSARY }
         variables={ variables }
-        fetchPolicy="no-cache">
+        fetchPolicy="cache-and-network">
         {({ data, loading, error }) => {
           if (loading) return <Loading />
           if (error) return <Error />
@@ -111,9 +112,9 @@ class GlossaryEntries extends React.Component {
                         <h3 className="mv0 navy">
                           { entry.title }
                         </h3>
-                        <p className="near-black mb0">
-                          { entry.byline }
-                        </p>
+                        <div
+                          className="near-black mb0"
+                          dangerouslySetInnerHTML={{ __html: marked(entry.byline) }} />
                       </div>
                     </Link>
                     <Link
